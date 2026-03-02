@@ -2,11 +2,11 @@ import requests
 import json
 import datetime
 
-# チーム名とIDのマッピング
+# 1. チーム名とIDのマッピング (MLB APIの実数値に修正済み)
 TEAM_ID = {
-    "ブルージェイズ": 147, "オリオールズ": 110, "ヤンキース": 111, "レッドソックス": 141, "レイズ": 139,
+    "ブルージェイズ": 141, "オリオールズ": 110, "ヤンキース": 147, "レッドソックス": 111, "レイズ": 139,
     "タイガース": 116, "ロイヤルズ": 118, "ガーディアンズ": 114, "ツインズ": 142, "ホワイトソックス": 145,
-    "マリナーズ": 136, "アストロズ": 117, "レンジャース": 140, "アスレチックス": 133, "エンゼルス": 108, "エンジェルス": 108,
+    "マリナーズ": 136, "アストロズ": 117, "レンジャース": 140, "アスレチックス": 133, "エンゼルス": 108,
     "メッツ": 121, "フィリーズ": 143, "ブレーブス": 144, "マーリンズ": 146, "ナショナルズ": 120,
     "ブリュワーズ": 158, "カブス": 112, "パイレーツ": 134, "レッズ": 113, "カージナルス": 138,
     "ドジャース": 119, "ジャイアンツ": 137, "ダイアモンドバックス": 109, "パドレス": 135, "ロッキーズ": 115
@@ -14,10 +14,10 @@ TEAM_ID = {
 
 ID_TO_NAME = {v: k for k, v in TEAM_ID.items()}
 
-# 3人の予想データ
+# 2. 3人の予想データ (修正後のID体系に基づき、順番が意図通りかご確認ください)
 PREDICTIONS = {
     "井口健介": {
-        "American League East": [141, 147, 111, 110, 139],
+        "American League East": [111, 141, 147, 110, 139],
         "American League Central": [116, 118, 114, 142, 145],
         "American League West": [136, 117, 140, 133, 108],
         "National League East": [121, 143, 144, 146, 120],
@@ -25,7 +25,7 @@ PREDICTIONS = {
         "National League West": [119, 137, 109, 135, 115]
     },
     "細川峻平": {
-        "American League East": [147, 110, 111, 141, 139],
+        "American League East": [141, 110, 147, 111, 139],
         "American League Central": [116, 114, 145, 118, 142],
         "American League West": [117, 136, 140, 133, 108],
         "National League East": [143, 121, 144, 120, 146],
@@ -33,7 +33,7 @@ PREDICTIONS = {
         "National League West": [137, 119, 135, 109, 115]
     },
     "田中雄太郎": {
-        "American League East": [147, 141, 111, 139, 110],
+        "American League East": [141, 111, 147, 139, 110],
         "American League Central": [114, 116, 118, 145, 142],
         "American League West": [136, 133, 117, 140, 108],
         "National League East": [121, 143, 144, 146, 120],
@@ -43,26 +43,35 @@ PREDICTIONS = {
 }
 
 def count_inversions(actual, prediction):
+    """
+    ケンドールの順位相関係数（の分子である転倒数）を計算。
+    実際の順位と予想の順位がどれだけ入れ替わっているかをカウント。
+    """
     n = len(actual)
     if n != len(prediction): return 0
+    # 実際の順位に基づいた各チームの重み付け
     rank_map = {team_id: i for i, team_id in enumerate(actual)}
     try:
-        prediction_ranks = [rank_map[team_id] for team_id in prediction]
+        prediction_ranks = [rank_map[team_id] for team_id in prediction if team_id in rank_map]
     except KeyError: return 0
+    
     inversions = 0
-    for i in range(n):
-        for j in range(i + 1, n):
-            if prediction_ranks[i] > prediction_ranks[j]: inversions += 1
+    for i in range(len(prediction_ranks)):
+        for j in range(i + 1, len(prediction_ranks)):
+            if prediction_ranks[i] > prediction_ranks[j]:
+                inversions += 1
     return inversions
 
 def main():
     url = "https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2025"
+    
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
         mlb_data = response.json()
     except Exception as e:
-        print(f"Error: {e}"); return
+        print(f"API Error: {e}")
+        return
 
     results = {
         "last_updated": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M:%S JST"),
@@ -75,27 +84,48 @@ def main():
         "National League East", "National League Central", "National League West"
     ]
 
-    for record in mlb_data.get("records", []):
-        division_name = record["division"]["name"]
-        if division_name not in target_divisions: continue
+    # APIから地区ごとにデータを抽出
+    if "records" not in mlb_data:
+        print("Error: 'records' key not found in API response.")
+        return
 
-        actual_standings = [team["team"]["id"] for team in record["teamRecords"]]
+    for record in mlb_data.get("records", []):
+        division_name = record.get("division", {}).get("name")
+        if division_name not in target_divisions:
+            continue
+
+        # 実順位のチームIDリスト（APIは順位順に並んでいる）
+        actual_standings = [team["team"]["id"] for team in record.get("teamRecords", [])]
+        
         division_data = {"name": division_name, "teams": []}
 
+        # スコア（転倒数）を加算
         for user, div_preds in PREDICTIONS.items():
-            results["scores"][user] += count_inversions(actual_standings, div_preds.get(division_name, []))
+            user_pred_list = div_preds.get(division_name, [])
+            results["scores"][user] += count_inversions(actual_standings, user_pred_list)
 
+        # 表示用データの生成
         for i, team_id in enumerate(actual_standings):
-            team_info = {"id": team_id, "name": ID_TO_NAME.get(team_id, f"ID:{team_id}"), "actual_rank": i + 1, "predictions": {}}
+            team_info = {
+                "id": team_id,
+                "name": ID_TO_NAME.get(team_id, f"ID:{team_id}"),
+                "actual_rank": i + 1,
+                "predictions": {}
+            }
             for user, div_preds in PREDICTIONS.items():
                 user_pred = div_preds.get(division_name, [])
-                try: team_info["predictions"][user] = user_pred.index(team_id) + 1
-                except ValueError: team_info["predictions"][user] = "-"
+                try:
+                    team_info["predictions"][user] = user_pred.index(team_id) + 1
+                except ValueError:
+                    team_info["predictions"][user] = "-"
             division_data["teams"].append(team_info)
+            
         results["divisions"].append(division_data)
 
+    # JSON出力
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
+    print("Successfully updated data.json")
 
 if __name__ == "__main__":
     main()
