@@ -148,13 +148,33 @@
         .team-name-text { font-weight: 600; }
 
         /* プレイヤー詳細ページ専用 */
+        /* プレイヤー詳細ページ専用のヘッダー修正 */
         .detail-header {
             background: linear-gradient(135deg, var(--mlb-blue) 0%, #004ba0 100%);
             color: white;
-            padding: 40px 20px;
+            /* パディングを 40px から 20px 程度に縮小 */
+            padding: 20px; 
             text-align: center;
             border-radius: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+        }
+
+        /* プレイヤー名のサイズを小さく調整 */
+        #detailPlayerName {
+            color: white;
+            margin: 0;
+            /* 2.5rem から 1.5rem 前後に縮小 */
+            font-size: 1.6rem; 
+            letter-spacing: 0.05em;
+        }
+
+        /* PREDICTIONSの文字もバランスを見て微調整 */
+        .detail-header p {
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin: 5px 0 0 0;
+            font-size: 0.7rem;
+            font-weight: bold;
         }
 
         @media (max-width: 600px) {
