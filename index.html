@@ -220,14 +220,14 @@
         </div>
 
         <div id="playerPage" class="hidden">
-            <div style="padding: 10px 0 20px 0;">
-                <a href="#" style="color:var(--mlb-blue); font-weight:bold; text-decoration:none; display: flex; align-items: center; gap: 5px;" onclick="location.hash=''; return false;">
-                    <span>◀</span> 全体の順位に戻る
+            <div style="padding: 5px 0;">
+                <a href="#" class="back-link" onclick="location.hash=''; return false;">
+                    <span style="font-size: 0.7rem;">◀</span> 戻る
                 </a>
             </div>
             <div class="detail-header">
-                <h1 id="detailPlayerName" style="color:white; margin:0; font-size: 2.5rem;"></h1>
-                <p style="letter-spacing: 4px; opacity: 0.8; margin: 10px 0 0 0; font-weight: bold;">PREDICTIONS</p>
+                <h1 id="detailPlayerName"></h1>
+                <p>Predictions</p>
             </div>
             <div id="playerPredictionsGrid" class="division-grid"></div>
         </div>
