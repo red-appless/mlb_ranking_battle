@@ -40,7 +40,23 @@
         .team-logo-large { width: 42px; height: 42px; }
 
         /* レイアウト */
-        .division-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; }
+        /* モバイルでは1列、PCでは2列にする設定 */
+        .division-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; /* 基本は1列 */
+            gap: 15px; 
+        }
+        @media (min-width: 800px) {
+            .division-grid { 
+                grid-template-columns: repeat(2, 1fr); /* 画面が広い時だけ2列 */
+            }
+        }
+
+        /* テーブルがはみ出さないように横スクロールを許可 */
+        .card {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* 指でのスクロールを滑らかに */
+        }
 
         /* 個別プレイヤーページ専用 */
         .back-btn { display: inline-block; margin-bottom: 15px; color: var(--mlb-blue); font-weight: bold; text-decoration: none; cursor: pointer; font-size: 1.1em; }
