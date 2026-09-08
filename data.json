@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-08 12:33:10 JST",
+  "last_updated": "2026-09-08 15:12:30 JST",
   "scores": {
     "井口健介": 25,
     "細川峻平": 27,
@@ -53,8 +53,8 @@
           "name": "ブルージェイズ",
           "actual_rank": 4,
           "wins": 72,
-          "losses": 72,
-          "pct": 0.5,
+          "losses": 73,
+          "pct": 0.497,
           "predictions": {
             "井口健介": 2,
             "細川峻平": 1,
@@ -192,9 +192,9 @@
           "id": 133,
           "name": "アスレチックス",
           "actual_rank": 4,
-          "wins": 57,
+          "wins": 58,
           "losses": 87,
-          "pct": 0.396,
+          "pct": 0.4,
           "predictions": {
             "井口健介": 4,
             "細川峻平": 4,
@@ -320,8 +320,8 @@
           "name": "カージナルス",
           "actual_rank": 3,
           "wins": 72,
-          "losses": 72,
-          "pct": 0.5,
+          "losses": 73,
+          "pct": 0.497,
           "predictions": {
             "井口健介": 5,
             "細川峻平": 5,
@@ -346,8 +346,8 @@
           "name": "レッズ",
           "actual_rank": 5,
           "wins": 69,
-          "losses": 74,
-          "pct": 0.483,
+          "losses": 75,
+          "pct": 0.479,
           "predictions": {
             "井口健介": 4,
             "細川峻平": 3,
@@ -363,9 +363,9 @@
           "id": 119,
           "name": "ドジャース",
           "actual_rank": 1,
-          "wins": 86,
+          "wins": 87,
           "losses": 57,
-          "pct": 0.601,
+          "pct": 0.604,
           "predictions": {
             "井口健介": 1,
             "細川峻平": 2,
@@ -402,9 +402,9 @@
           "id": 137,
           "name": "ジャイアンツ",
           "actual_rank": 4,
-          "wins": 59,
+          "wins": 60,
           "losses": 85,
-          "pct": 0.41,
+          "pct": 0.414,
           "predictions": {
             "井口健介": 2,
             "細川峻平": 1,
