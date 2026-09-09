@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-09 13:17:32 JST",
+  "last_updated": "2026-09-09 16:54:50 JST",
   "scores": {
     "井口健介": 23,
     "細川峻平": 25,
@@ -166,9 +166,9 @@
           "id": 140,
           "name": "レンジャース",
           "actual_rank": 2,
-          "wins": 71,
+          "wins": 72,
           "losses": 73,
-          "pct": 0.493,
+          "pct": 0.497,
           "predictions": {
             "井口健介": 3,
             "細川峻平": 3,
@@ -180,8 +180,8 @@
           "name": "マリナーズ",
           "actual_rank": 3,
           "wins": 67,
-          "losses": 77,
-          "pct": 0.465,
+          "losses": 78,
+          "pct": 0.462,
           "predictions": {
             "井口健介": 1,
             "細川峻平": 2,
@@ -346,8 +346,8 @@
           "name": "レッズ",
           "actual_rank": 5,
           "wins": 69,
-          "losses": 75,
-          "pct": 0.479,
+          "losses": 76,
+          "pct": 0.476,
           "predictions": {
             "井口健介": 4,
             "細川峻平": 3,
@@ -363,9 +363,9 @@
           "id": 119,
           "name": "ドジャース",
           "actual_rank": 1,
-          "wins": 87,
+          "wins": 88,
           "losses": 57,
-          "pct": 0.604,
+          "pct": 0.607,
           "predictions": {
             "井口健介": 1,
             "細川峻平": 2,
